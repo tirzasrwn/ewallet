@@ -11,3 +11,9 @@ CREATE TABLE IF NOT EXISTS transactions (
   CONSTRAINT fk_sender FOREIGN KEY (sender_id) REFERENCES users(id),
   CONSTRAINT fk_receiver FOREIGN KEY (receiver_id) REFERENCES users(id)
 );
+
+-- Indexes for query performance
+CREATE INDEX idx_transactions_sender_id ON transactions(sender_id);
+CREATE INDEX idx_transactions_receiver_id ON transactions(receiver_id);
+CREATE INDEX idx_transactions_created_at ON transactions(created_at);
+CREATE INDEX idx_transactions_deleted_at ON transactions(deleted_at);
