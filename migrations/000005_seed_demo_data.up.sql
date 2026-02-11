@@ -8,4 +8,4 @@ INSERT INTO users (id, name, email, password, created_at, updated_at) VALUES
 
 -- Seed wallets for the demo users
 INSERT INTO wallets (id, user_id, balance, created_at, updated_at)
-SELECT gen_random_uuid(), id, 1000, NOW(), NOW() FROM users;
+SELECT gen_random_uuid(), id, 0, NOW(), NOW() FROM users;
