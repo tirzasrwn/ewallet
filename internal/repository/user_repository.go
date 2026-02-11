@@ -3,6 +3,7 @@ package repository
 import (
 	"errors"
 	"ewallet/internal/models"
+	"github.com/google/uuid"
 
 	"gorm.io/gorm"
 )
@@ -10,7 +11,7 @@ import (
 type UserRepository interface {
 	Create(user *models.User) error
 	FindByEmail(email string) (*models.User, error)
-	FindByID(id uint) (*models.User, error)
+	FindByID(id uuid.UUID) (*models.User, error)
 }
 
 type userRepository struct {
@@ -37,7 +38,7 @@ func (r *userRepository) FindByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
-func (r *userRepository) FindByID(id uint) (*models.User, error) {
+func (r *userRepository) FindByID(id uuid.UUID) (*models.User, error) {
 	var user models.User
 	err := r.db.Preload("Wallet").First(&user, id).Error
 	if err != nil {

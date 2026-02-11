@@ -17,13 +17,13 @@ func NewAuthHandler(authService service.AuthService) *AuthHandler {
 }
 
 type RegisterRequest struct {
-	Name     string `json:"name" binding:"required" example:"John Doe"`
-	Email    string `json:"email" binding:"required,email" example:"john@example.com"`
+	Name     string `json:"name" binding:"required" example:"alice"`
+	Email    string `json:"email" binding:"required,email" example:"alice@example.com"`
 	Password string `json:"password" binding:"required,min=6" example:"password123"`
 }
 
 type LoginRequest struct {
-	Email    string `json:"email" binding:"required,email" example:"john@example.com"`
+	Email    string `json:"email" binding:"required,email" example:"alice@example.com"`
 	Password string `json:"password" binding:"required" example:"password123"`
 }
 

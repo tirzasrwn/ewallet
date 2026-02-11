@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 type TransactionHandler struct {
@@ -19,8 +20,8 @@ func NewTransactionHandler(transactionService service.TransactionService) *Trans
 }
 
 type TransferRequest struct {
-	ReceiverID uint    `json:"receiver_id" binding:"required,gt=0" example:"2"`
-	Amount     float64 `json:"amount" binding:"required,gt=0" example:"50000"`
+	ReceiverID uuid.UUID `json:"receiver_id" binding:"required"`
+	Amount     float64   `json:"amount" binding:"required,gt=0" example:"50000"`
 }
 
 // Transfer godoc

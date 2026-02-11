@@ -3,15 +3,16 @@ package repository
 import (
 	"errors"
 	"ewallet/internal/models"
+	"github.com/google/uuid"
 
 	"gorm.io/gorm"
 )
 
 type WalletRepository interface {
 	Create(wallet *models.Wallet) error
-	FindByUserID(userID uint) (*models.Wallet, error)
-	UpdateBalance(walletID uint, amount float64) error
-	UpdateBalanceWithLock(tx *gorm.DB, walletID uint, amount float64) error
+	FindByUserID(userID uuid.UUID) (*models.Wallet, error)
+	UpdateBalance(walletID uuid.UUID, amount float64) error
+	UpdateBalanceWithLock(tx *gorm.DB, walletID uuid.UUID, amount float64) error
 }
 
 type walletRepository struct {
@@ -26,7 +27,7 @@ func (r *walletRepository) Create(wallet *models.Wallet) error {
 	return r.db.Create(wallet).Error
 }
 
-func (r *walletRepository) FindByUserID(userID uint) (*models.Wallet, error) {
+func (r *walletRepository) FindByUserID(userID uuid.UUID) (*models.Wallet, error) {
 	var wallet models.Wallet
 	err := r.db.Where("user_id = ?", userID).First(&wallet).Error
 	if err != nil {
@@ -38,11 +39,11 @@ func (r *walletRepository) FindByUserID(userID uint) (*models.Wallet, error) {
 	return &wallet, nil
 }
 
-func (r *walletRepository) UpdateBalance(walletID uint, amount float64) error {
+func (r *walletRepository) UpdateBalance(walletID uuid.UUID, amount float64) error {
 	return r.db.Model(&models.Wallet{}).Where("id = ?", walletID).Update("balance", amount).Error
 }
 
-func (r *walletRepository) UpdateBalanceWithLock(tx *gorm.DB, walletID uint, amount float64) error {
+func (r *walletRepository) UpdateBalanceWithLock(tx *gorm.DB, walletID uuid.UUID, amount float64) error {
 	return tx.Model(&models.Wallet{}).
 		Where("id = ?", walletID).
 		Update("balance", amount).Error

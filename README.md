@@ -194,8 +194,8 @@ POST /api/auth/register
 Content-Type: application/json
 
 {
-  "name": "John Doe",
-  "email": "john@example.com",
+  "name": "alice",
+  "email": "alice@example.com",
   "password": "password123"
 }
 ```
@@ -206,7 +206,7 @@ POST /api/auth/login
 Content-Type: application/json
 
 {
-  "email": "john@example.com",
+  "email": "alice@example.com",
   "password": "password123"
 }
 
@@ -217,9 +217,9 @@ Response:
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIs...",
     "user": {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john@example.com"
+    "id": 1,
+    "name": "alice",
+    "email": "alice@example.com"
     }
   }
 }
@@ -356,14 +356,14 @@ make migrate-up
 ```bash
 curl -X POST http://localhost:8080/api/auth/register \
   -H "Content-Type: application/json" \
-  -d '{"name":"John Doe","email":"john@example.com","password":"password123"}'
+  -d '{"name":"alice","email":"alice@example.com","password":"password123"}'
 ```
 
 ### Login
 ```bash
 curl -X POST http://localhost:8080/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"john@example.com","password":"password123"}'
+  -d '{"email":"alice@example.com","password":"password123"}'
 ```
 
 ### Get Profile

@@ -3,7 +3,7 @@ definitions:
   handlers.LoginRequest:
     properties:
       email:
-        example: john@example.com
+        example: alice@example.com
         type: string
       password:
         example: password123
@@ -15,10 +15,10 @@ definitions:
   handlers.RegisterRequest:
     properties:
       email:
-        example: john@example.com
+        example: alice@example.com
         type: string
       name:
-        example: John Doe
+        example: alice
         type: string
       password:
         example: password123
@@ -43,8 +43,7 @@ definitions:
         example: 50000
         type: number
       receiver_id:
-        example: 2
-        type: integer
+        type: string
     required:
     - amount
     - receiver_id

@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func AuthMiddleware(jwtUtil *utils.JWTUtil) gin.HandlerFunc {
@@ -38,12 +39,12 @@ func AuthMiddleware(jwtUtil *utils.JWTUtil) gin.HandlerFunc {
 	}
 }
 
-func GetUserID(c *gin.Context) (uint, bool) {
+func GetUserID(c *gin.Context) (uuid.UUID, bool) {
 	userID, exists := c.Get("user_id")
 	if !exists {
-		return 0, false
+		return uuid.Nil, false
 	}
 
-	id, ok := userID.(uint)
+	id, ok := userID.(uuid.UUID)
 	return id, ok
 }

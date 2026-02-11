@@ -3,12 +3,13 @@ package repository
 import (
 	"ewallet/internal/models"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 type TransactionRepository interface {
 	Create(tx *gorm.DB, transaction *models.Transaction) error
-	FindByUserID(userID uint, limit int) ([]models.Transaction, error)
+	FindByUserID(userID uuid.UUID, limit int) ([]models.Transaction, error)
 }
 
 type transactionRepository struct {
@@ -26,7 +27,7 @@ func (r *transactionRepository) Create(tx *gorm.DB, transaction *models.Transact
 	return tx.Create(transaction).Error
 }
 
-func (r *transactionRepository) FindByUserID(userID uint, limit int) ([]models.Transaction, error) {
+func (r *transactionRepository) FindByUserID(userID uuid.UUID, limit int) ([]models.Transaction, error) {
 	var transactions []models.Transaction
 	query := r.db.Where("sender_id = ? OR receiver_id = ?", userID, userID).
 		Order("created_at DESC")

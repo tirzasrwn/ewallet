@@ -5,13 +5,14 @@ import (
 	"ewallet/internal/models"
 	"ewallet/internal/repository"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
 type WalletService interface {
-	GetBalance(userID uint) (*models.Wallet, error)
-	TopUp(userID uint, amount float64) (*models.Wallet, error)
+	GetBalance(userID uuid.UUID) (*models.Wallet, error)
+	TopUp(userID uuid.UUID, amount float64) (*models.Wallet, error)
 }
 
 type walletService struct {
@@ -32,7 +33,7 @@ func NewWalletService(
 	}
 }
 
-func (s *walletService) GetBalance(userID uint) (*models.Wallet, error) {
+func (s *walletService) GetBalance(userID uuid.UUID) (*models.Wallet, error) {
 	wallet, err := s.walletRepo.FindByUserID(userID)
 	if err != nil {
 		return nil, err
@@ -40,7 +41,7 @@ func (s *walletService) GetBalance(userID uint) (*models.Wallet, error) {
 	return wallet, nil
 }
 
-func (s *walletService) TopUp(userID uint, amount float64) (*models.Wallet, error) {
+func (s *walletService) TopUp(userID uuid.UUID, amount float64) (*models.Wallet, error) {
 	// Validate amount
 	if amount <= 0 {
 		return nil, errors.New("amount must be greater than 0")

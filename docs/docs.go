@@ -351,7 +351,7 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "john@example.com"
+                    "example": "alice@example.com"
                 },
                 "password": {
                     "type": "string",
@@ -369,11 +369,11 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string",
-                    "example": "john@example.com"
+                    "example": "alice@example.com"
                 },
                 "name": {
                     "type": "string",
-                    "example": "John Doe"
+                    "example": "alice"
                 },
                 "password": {
                     "type": "string",
@@ -406,8 +406,7 @@ const docTemplate = `{
                     "example": 50000
                 },
                 "receiver_id": {
-                    "type": "integer",
-                    "example": 2
+                    "type": "string"
                 }
             }
         },

@@ -3,6 +3,7 @@ package models
 import (
 	"time"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -19,9 +20,9 @@ const (
 )
 
 type Transaction struct {
-	ID         uint              `gorm:"primaryKey" json:"id"`
-	SenderID   *uint             `gorm:"index" json:"sender_id,omitempty"`
-	ReceiverID uint              `gorm:"index;not null" json:"receiver_id"`
+	ID         uuid.UUID         `gorm:"type:uuid;primary_key;default:gen_random_uuid()" json:"id"`
+	SenderID   *uuid.UUID        `gorm:"type:uuid;index" json:"sender_id,omitempty"`
+	ReceiverID uuid.UUID         `gorm:"type:uuid;index;not null" json:"receiver_id"`
 	Amount     float64           `gorm:"type:decimal(15,2);not null" json:"amount"`
 	Type       TransactionType   `gorm:"type:varchar(20);not null" json:"type"`
 	Status     TransactionStatus `gorm:"type:varchar(20);not null;default:'pending'" json:"status"`
@@ -32,11 +33,19 @@ type Transaction struct {
 	DeletedAt  gorm.DeletedAt    `gorm:"index" json:"-"`
 }
 
+// BeforeCreate hook to generate UUID
+func (t *Transaction) BeforeCreate(tx *gorm.DB) error {
+	if t.ID == uuid.Nil {
+		t.ID = uuid.New()
+	}
+	return nil
+}
+
 // TransactionResponse represents the transaction data returned in API responses
 type TransactionResponse struct {
-	ID         uint              `json:"id"`
-	SenderID   *uint             `json:"sender_id,omitempty"`
-	ReceiverID uint              `json:"receiver_id"`
+	ID         uuid.UUID         `json:"id"`
+	SenderID   *uuid.UUID        `json:"sender_id,omitempty"`
+	ReceiverID uuid.UUID         `json:"receiver_id"`
 	Amount     float64           `json:"amount"`
 	Type       TransactionType   `json:"type"`
 	Status     TransactionStatus `json:"status"`

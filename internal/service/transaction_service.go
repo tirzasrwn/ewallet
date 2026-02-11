@@ -5,13 +5,15 @@ import (
 	"ewallet/internal/models"
 	"ewallet/internal/repository"
 
+	"bytes"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )
 
 type TransactionService interface {
-	Transfer(senderID, receiverID uint, amount float64) (*models.Transaction, error)
-	GetHistory(userID uint, limit int) ([]models.Transaction, error)
+	Transfer(senderID, receiverID uuid.UUID, amount float64) (*models.Transaction, error)
+	GetHistory(userID uuid.UUID, limit int) ([]models.Transaction, error)
 }
 
 type transactionService struct {
@@ -35,7 +37,7 @@ func NewTransactionService(
 	}
 }
 
-func (s *transactionService) Transfer(senderID, receiverID uint, amount float64) (*models.Transaction, error) {
+func (s *transactionService) Transfer(senderID uuid.UUID, receiverID uuid.UUID, amount float64) (*models.Transaction, error) {
 	// Validate amount
 	if amount <= 0 {
 		return nil, errors.New("amount must be greater than 0")
@@ -78,7 +80,7 @@ func (s *transactionService) Transfer(senderID, receiverID uint, amount float64)
 		// Get receiver wallet with row lock (FOR UPDATE)
 		var receiverWallet models.Wallet
 		// Lock wallets in consistent order to prevent deadlock (lower ID first)
-		if senderID < receiverID {
+		if bytes.Compare(senderID[:], receiverID[:]) < 0 {
 			if err := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
 				Where("user_id = ?", receiverID).
 				First(&receiverWallet).Error; err != nil {
@@ -143,7 +145,7 @@ func (s *transactionService) Transfer(senderID, receiverID uint, amount float64)
 	return transaction, nil
 }
 
-func (s *transactionService) GetHistory(userID uint, limit int) ([]models.Transaction, error) {
+func (s *transactionService) GetHistory(userID uuid.UUID, limit int) ([]models.Transaction, error) {
 	transactions, err := s.transactionRepo.FindByUserID(userID, limit)
 	if err != nil {
 		return nil, err
